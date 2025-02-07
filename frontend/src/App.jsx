@@ -7,6 +7,7 @@ import Generate from './pages/Generate';
 import Products from "./pages/Products";
 import Contact from "./pages/Contact";
 import Pricing from "./pages/Pricing";
+import View from "./pages/View";
 
 const App = () => {
   return (
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/products" element={<Products />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/pricing" element={<Pricing />} />
+        <Route path="/view" element={<View />} />
       </Routes>
       <Footer />
     </div>
