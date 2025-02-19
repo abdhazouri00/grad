@@ -48,7 +48,6 @@ const Contact = () => {
           Need details about a Business plan? Let us know.
         </p>
         <form onSubmit={handleSubmit} className="space-y-8">
-          {/* First Name and Last Name Fields */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label
@@ -124,7 +123,6 @@ const Contact = () => {
             />
           </div>
 
-          {/* Message Field */}
           <div className="sm:col-span-2">
             <label
               htmlFor="message"

@@ -50,7 +50,7 @@ const Main = () => {
       <section className="my-20">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <div className="flex justify-center items-center md:items-stretch">
-            <div className="block max-w-lg p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100">
+            <div className="block max-w-xl p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100">
               <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 ">
                 Generate documents in minutes
               </h5>
@@ -65,7 +65,7 @@ const Main = () => {
             </div>
           </div>
           <div className="flex justify-center items-center md:items-stretch">
-            <div className="block max-w-lg p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100">
+            <div className="block max-w-xl p-6 bg-white border border-gray-200 rounded-lg shadow hover:bg-gray-100">
               <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 ">
                 Customize and edit your AI-generated documents online
               </h5>

@@ -3,13 +3,22 @@ import htmlDocx from "html-docx-js";
 
 // HTML content
 const html = `
-  <h1 style="text-align: center;">FUK WORK PLEASE</h1>
-  <p><strong>The system</strong> must be intuitive and efficient.</p>
-  <h2>Functional Requirements</h2>
-  <ul>
-    <li>Create, edit, and delete tasks</li>
-    <li>Assign due dates and priorities</li>
-  </ul>
+  <h2 style="color: #007bff;">1. Introduction</h2>
+    <p><strong>Purpose:</strong> This document outlines the functional and non-functional requirements of the system.</p>
+
+    <h3 style="color: #28a745;">1.1 Scope</h3>
+    <p>The system will provide the following key features:</p>
+    <ul style="margin-left: 20px;">
+        <li>User authentication and authorization</li>
+        <li>Real-time data synchronization</li>
+        <li>Customizable reporting</li>
+    </ul>
+
+    <h3 style="color: #dc3545;">1.2 Key Requirements</h3>
+    <ol style="margin-left: 20px;">
+        <li>Users must be able to register and log in securely.</li>
+        <li>The system must support multiple user roles.</li>
+    </ol>
 `;
 
 // Async function to generate the docx file
@@ -24,7 +33,7 @@ async function generateDocx() {
   const buffer = Buffer.from(arrayBuffer);
 
   // Write the Buffer to a .docx file
-  fs.writeFileSync("output3.docx", buffer);
+  fs.writeFileSync("output4.docx", buffer);
   console.log("File saved as output.docx");
 }
 
