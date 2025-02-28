@@ -3,6 +3,13 @@ import assets from "../assets/assets";
 import { Link } from "react-router";
 
 const Main = () => {
+
+  const scrollToSection = () => {
+    document
+      .getElementById("how-does-it-work")
+      ?.scrollIntoView({ behavior: "smooth" });
+  };
+
   return (
     <>
       <section className="bg-white">
@@ -34,12 +41,12 @@ const Main = () => {
                 </svg>
               </button>
             </Link>
-            <a
-              href="#"
+            <button
+              onClick={scrollToSection}
               className="inline-flex items-center justify-center px-5 py-3 text-base font-medium text-center text-gray-900 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-4 focus:ring-gray-100"
             >
               Learn More
-            </a>
+            </button>
           </div>
           <div className="hidden lg:mt-0 lg:col-span-5 lg:flex">
             <img src={assets.hero} alt="mockup" />
@@ -82,7 +89,7 @@ const Main = () => {
         </div>
       </section>
 
-      <section className="p-4 mb-20">
+      <section id="how-does-it-work" className="p-4 mb-20">
         <div className="flex flex-col gap-8 text-center">
           <h1 className="text-2xl font-bold">How does it work ?</h1>
           <hr />

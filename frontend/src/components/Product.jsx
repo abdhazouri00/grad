@@ -1,7 +1,7 @@
 import React from "react";
-import { Link } from 'react-router';
+import { Link } from "react-router";
 
-const Product = ({title , desc}) => {
+const Product = ({ title, desc }) => {
   return (
     <div className="max-w-sm p-6 bg-white border border-gray-200 rounded-lg shadow">
       <a href="#">
@@ -9,9 +9,7 @@ const Product = ({title , desc}) => {
           {title}
         </h5>
       </a>
-      <p className="mb-3 font-normal text-gray-700">
-        {desc}
-      </p>
+      <p className="mb-3 font-normal text-gray-700">{desc}</p>
       <Link
         to={`/generate`}
         className="inline-flex items-center px-3 py-2 text-sm font-medium text-center text-white bg-gray-600 rounded-lg hover:bg-gray-800 focus:ring-4 focus:outline-none focus:ring-blue-300"
@@ -23,12 +21,12 @@ const Product = ({title , desc}) => {
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
           viewBox="0 0 14 10"
-        > 
+        >
           <path
             stroke="currentColor"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            stroke-width="2"
+            strokeLinecap="round"
+            strokeLinejoin="round"
+            strokeWidth="2"
             d="M1 5h12m0 0L9 1m4 4L9 9"
           />
         </svg>

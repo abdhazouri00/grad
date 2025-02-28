@@ -12,6 +12,7 @@ import Login from "./pages/Login";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import UserPage from "./pages/UserPage";
+import Checkout from "./pages/Checkout";
 
 const App = () => {
   const location = useLocation();
@@ -36,6 +37,7 @@ const App = () => {
           <Route path="/view" element={<View />} />
           <Route path="/login" element={<Login />} />
           <Route path="/profile" element={<UserPage />} />
+          <Route path="/checkout" element={<Checkout />} />
         </Routes>
       </div>
       {showFooter && <Footer />}

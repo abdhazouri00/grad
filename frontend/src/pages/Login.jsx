@@ -1,13 +1,14 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
-import { Context } from "../context/context";
+import { Context } from "../context/Context";
 import { Navigate, useNavigate } from "react-router";
 
 const Login = () => {
   const [currentState, setCurrentState] = useState("Login");
 
-  const { token, setToken, backendUrl, setId } = useContext(Context);
+  const { token, setToken, backendUrl, setId, setCredit, setLoggedIn } =
+    useContext(Context);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -24,6 +25,7 @@ const Login = () => {
           name,
           email,
           password,
+          credit: localStorage.getItem("credit"),
         });
 
         if (response.data.statusCode === 200) {
@@ -35,6 +37,7 @@ const Login = () => {
           setName("");
           setEmail("");
           setPassword("");
+          setLoggedIn(true);
         } else {
           toast.error(response.data.message);
         }
@@ -45,6 +48,8 @@ const Login = () => {
         });
 
         if (response.data.statusCode === 200) {
+          console.log(response.data);
+          setCredit(response.data.credit);
           setToken(response.data.token);
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("id", response.data.id);
@@ -53,6 +58,7 @@ const Login = () => {
           setName("");
           setEmail("");
           setPassword("");
+          setLoggedIn(true);
         } else {
           toast.error(response.data.message);
         }
@@ -105,7 +111,10 @@ const Login = () => {
         onChange={(e) => setPassword(e.target.value)}
       />
       <div className="w-full flex justify-between text-sm mt-[-8px]">
-        <p onClick={() => toast.error("زرق حسابك")} className="cursor-pointer">
+        <p
+          onClick={() => toast.error("Fix Later Please")}
+          className="cursor-pointer"
+        >
           Forgot your Password ?
         </p>
         {currentState === "Login" ? (

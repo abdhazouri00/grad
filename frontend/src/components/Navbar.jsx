@@ -2,22 +2,26 @@ import React, { useContext, useState, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
 import assets from "../assets/assets.js";
 import profile from "../assets/profile_icon.png";
-import { Context } from "../context/context.jsx";
+import { Context } from "../context/Context.jsx";
 import axios from "axios";
-import {
-  Description,
-  Dialog,
-  DialogPanel,
-  DialogTitle,
-  Transition
-} from "@headlessui/react";
+import { Dialog, Transition } from "@headlessui/react";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
   let [isOpen, setIsOpen] = useState(false);
-  const [info, setInfo] = useState({});
 
-  const { token, setToken, setId, id, backendUrl } = useContext(Context);
+  const {
+    token,
+    setToken,
+    setId,
+    id,
+    backendUrl,
+    getInfo,
+    info,
+    setInfo,
+    credit,
+    setCredit,
+  } = useContext(Context);
 
   const navigate = useNavigate();
 
@@ -25,28 +29,28 @@ const Navbar = () => {
     localStorage.removeItem("token");
     setToken("");
     localStorage.removeItem("id");
+    setCredit(localStorage.getItem("credit"));
     setId("");
     navigate("/login");
   };
 
-  const getInfo = async () => {
-    try {
-      const response = await axios.get(`${backendUrl}/api/user/${id}`);
-      console.log(response.data);
-      setInfo(response.data);
-      localStorage.setItem("userInfo", JSON.stringify(response.data));
-    } catch (error) {
-      console.error("Error fetching user info:", error);
-    }
+  const handleNavigate = () => {
+    navigate("/pricing");
+    setIsOpen(false);
+  };
+
+  const smallProfile = () => {
+    setVisible(false);
+    setIsOpen(true);
   };
 
   useEffect(() => {
     const storedInfo = localStorage.getItem("userInfo");
     if (storedInfo) {
-      setInfo(JSON.parse(storedInfo)); 
+      setInfo(JSON.parse(storedInfo));
     }
     if (token && id) {
-      getInfo(); 
+      getInfo();
     }
   }, [token, id]);
 
@@ -59,29 +63,39 @@ const Navbar = () => {
           </Link>
 
           <ul className="hidden sm:flex gap-5 text-sm text-gray-700">
-            <NavLink to="/" className="flex flex-col items-center gap-1">
+            <NavLink
+              to="/"
+              className="flex flex-col items-center justify-center gap-1"
+            >
               <p>HOME</p>
               <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden" />
             </NavLink>
             <NavLink
               to="/generate"
-              className="flex flex-col items-center gap-1"
+              className="flex flex-col items-center justify-center gap-1"
             >
               <p>GENERATE</p>
               <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden" />
             </NavLink>
             <NavLink
               to="/products"
-              className="flex flex-col items-center gap-1"
+              className="flex flex-col items-center justify-center gap-1"
             >
               <p>PRODUCTS</p>
               <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden" />
             </NavLink>
-            <NavLink to="/pricing" className="flex flex-col items-center gap-1">
+
+            <NavLink
+              to="/pricing"
+              className="flex flex-col items-center justify-center gap-1"
+            >
               <p>PRICING</p>
               <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden" />
             </NavLink>
-            <NavLink to="/contact" className="flex flex-col items-center gap-1">
+            <NavLink
+              to="/contact"
+              className="flex flex-col items-center justify-center gap-1"
+            >
               <p>CONTACT</p>
               <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden" />
             </NavLink>
@@ -136,40 +150,55 @@ const Navbar = () => {
                                     Profile Information
                                   </h5>
 
-                                  <p className="mb-3 font-normal text-gray-500">
-                                    Name: {info.name}
+                                  <p className="flex flex-row mb-3 font-normal text-gray-500">
+                                    <span className="text-black font-medium">
+                                      Name: &nbsp;
+                                    </span>
+                                    {info.name}
                                   </p>
-                                  <p className="mb-3 font-normal text-gray-500">
-                                    Email: {info.email}
+                                  <p className="flex flex-row mb-3 font-normal text-gray-500">
+                                    <span className="text-black font-medium">
+                                      Email: &nbsp;
+                                    </span>
+                                    {info.email}
                                   </p>
-                                  <p className="mb-3 font-normal text-gray-500">
-                                    Credit: 0
+                                  <p className="flex flex-row mb-3 font-normal text-gray-500">
+                                    <span className="text-black font-medium">
+                                      Credit: &nbsp;
+                                    </span>{" "}
+                                    {info.credit}
                                   </p>
-                                  <p className="mb-3 font-normal text-gray-500">
-                                    Plan: {info.Plan}
+                                  <p className="flex flex-row mb-3 font-normal text-gray-500">
+                                    <span className="text-black font-medium">
+                                      Plan: &nbsp;
+                                    </span>{" "}
+                                    {info.plan}
                                   </p>
 
-                                  <a
-                                    href="#"
-                                    className="inline-flex font-medium items-center text-blue-600 hover:underline"
-                                  >
-                                    See our guideline
-                                    <svg
-                                      className="w-3 h-3 ms-2.5 rtl:rotate-[270deg]"
-                                      aria-hidden="true"
-                                      xmlns="http://www.w3.org/2000/svg"
-                                      fill="none"
-                                      viewBox="0 0 18 18"
+                                  {info.plan == "None" ? (
+                                    <Link
+                                      to="/pricing"
+                                      onClick={handleNavigate}
+                                      className="inline-flex font-medium items-center text-blue-600 hover:underline"
                                     >
-                                      <path
-                                        stroke="currentColor"
-                                        strokeLinecap="round"
-                                        strokeLinejoin="round"
-                                        strokeWidth="2"
-                                        d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"
-                                      />
-                                    </svg>
-                                  </a>
+                                      See Pricing Plans
+                                      <svg
+                                        className="w-3 h-3 ms-2.5 rtl:rotate-[270deg]"
+                                        aria-hidden="true"
+                                        xmlns="http://www.w3.org/2000/svg"
+                                        fill="none"
+                                        viewBox="0 0 18 18"
+                                      >
+                                        <path
+                                          stroke="currentColor"
+                                          strokeLinecap="round"
+                                          strokeLinejoin="round"
+                                          strokeWidth="2"
+                                          d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"
+                                        />
+                                      </svg>
+                                    </Link>
+                                  ) : null}
                                 </div>
                                 <div className="flex gap-4">
                                   <button
@@ -177,6 +206,12 @@ const Navbar = () => {
                                     onClick={() => setIsOpen(false)}
                                   >
                                     Close
+                                  </button>
+                                  <button
+                                    className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-gray-600"
+                                    onClick={() => logout()}
+                                  >
+                                    Logout
                                   </button>
                                 </div>
                               </Dialog.Panel>
@@ -196,6 +231,12 @@ const Navbar = () => {
                 )}
               </div>
 
+              <div className="flex items-center justify-center">
+                <p className="text-[12px] border rounded-lg p-2">
+                  {credit} Credit
+                </p>
+              </div>
+
               <img
                 src={assets.menu_icon}
                 onClick={() => setVisible(true)}
@@ -206,6 +247,10 @@ const Navbar = () => {
         </div>
 
         <div className="flex items-center gap-6 sm:hidden">
+          <div className="flex items-center justify-center">
+            <p className="text-[12px] border rounded-lg p-2">{credit} Credit</p>
+          </div>
+
           <img
             src={assets.menu_icon}
             onClick={() => setVisible(true)}
@@ -237,21 +282,30 @@ const Navbar = () => {
                 </div>
               </NavLink>
               <hr className="w-100 pl-0 " />
-              <NavLink to="/collection">
+              <NavLink to="/generate">
                 <div
                   onClick={() => setVisible(false)}
                   className="items-center pl-4 py-4"
                 >
-                  <p>COLLECTION</p>
+                  <p>GENERATE</p>
                 </div>
               </NavLink>
               <hr className="w-100 pl-0 " />
-              <NavLink to="/about">
+              <NavLink to="/products">
                 <div
                   onClick={() => setVisible(false)}
                   className="items-center pl-4 py-4"
                 >
-                  <p>ABOUT</p>
+                  <p>PRODUCTS</p>
+                </div>
+              </NavLink>
+              <hr className="w-100 pl-0 " />
+              <NavLink to="/pricing">
+                <div
+                  onClick={() => setVisible(false)}
+                  className="items-center pl-4 py-4"
+                >
+                  <p>PRICING</p>
                 </div>
               </NavLink>
               <hr className="w-100 pl-0 " />
@@ -263,6 +317,10 @@ const Navbar = () => {
                   <p>CONTACT</p>
                 </div>
               </NavLink>
+              <hr className="w-100 pl-0 " />
+              <div onClick={smallProfile} className="items-center pl-4 py-4">
+                <p>PROFILE</p>
+              </div>
               <hr className="w-100 pl-0 " />
             </ul>
           </div>

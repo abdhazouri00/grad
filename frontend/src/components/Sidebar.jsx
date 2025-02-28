@@ -1,14 +1,19 @@
 import { useContext, useState } from "react";
-import { Context } from "../context/context";
+import { Context } from "../context/Context";
 import assets from "../assets/assets.js";
 
 const Sidebar = () => {
   const [extended, setExtended] = useState(false);
-  const { onSent, prevPrompts, setRecentPrompt, newChat } = useContext(Context);
+  const { onSent, setRecentPrompt, setConversation, chats, setNewChat } =
+    useContext(Context);
 
-  const loadPreviousPrompt = async (prompt) => {
-    setRecentPrompt(prompt);
-    await onSent(prompt);
+  const handleExtend = () => {
+    setExtended((prev) => !prev);
+  };
+
+  const handleClick = (e) => {
+    setConversation(e.messages);
+    setNewChat(true);
   };
 
   return (
@@ -18,24 +23,20 @@ const Sidebar = () => {
           src={assets.menu_icon}
           className="menu block ml-[10px] cursor-pointer w-[30px]"
           alt="menu-icon"
-          onClick={() => {
-            setExtended((prev) => !prev);
-          }}
+          onClick={handleExtend}
         />
         {extended ? (
           <div className="recent flex flex-col animate-fadeIn">
             <p className="recent-title mt-[30px] mb-[20px]">Recent</p>
-            {prevPrompts.map((item, index) => {
+            {chats.map((item, index) => {
               return (
                 <div
+                  onClick={() => handleClick(item)}
                   key={index}
-                  onClick={() => {
-                    loadPreviousPrompt(item);
-                  }}
                   className="recent-entry flex items-start gap-[10px] p-[10px] pr-[40px] rounded-full text-[#282828] cursor-pointer hover:bg-[#e2e6eb]"
                 >
                   <img src={assets.message_icon} alt="" className="w-[30px]" />
-                  <p>{item.slice(0, 18)}...</p>
+                  <p>{item.title}</p>
                 </div>
               );
             })}
