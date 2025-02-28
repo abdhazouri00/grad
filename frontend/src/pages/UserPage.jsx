@@ -1,6 +1,6 @@
 import React, { useEffect, useContext, useState } from "react";
 import axios from "axios";
-import { Context } from "../context/context";
+import { Context } from "src/context/Context";
 
 const UserPage = () => {
   const { backendUrl, token, id } = useContext(Context); 

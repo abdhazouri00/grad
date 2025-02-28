@@ -1,19 +1,18 @@
 import React, { useContext } from "react";
-import { Context } from "../context/Context";
+import { Context } from "src/context/Context";
 import { useNavigate } from "react-router";
 
 const Pricing = () => {
+  const { setPlan, setCreditToBuy, setPlanTotal } = useContext(Context);
 
-  const { setPlan, setCreditToBuy , setPlanTotal } = useContext(Context)
-  
   const navigate = useNavigate();
-  
-  const handleClick = (a , b , c) => {
-    setPlan(a)
-    setCreditToBuy(b)
-    setPlanTotal(c)
-    navigate("/checkout")
-  }
+
+  const handleClick = (a, b, c) => {
+    setPlan(a);
+    setCreditToBuy(b);
+    setPlanTotal(c);
+    navigate("/checkout");
+  };
 
   return (
     <section className="bg-white">
@@ -123,7 +122,7 @@ const Pricing = () => {
               </li>
             </ul>
             <button
-              onClick={() => handleClick('Starter' , 75 , 0)}
+              onClick={() => handleClick("Starter", 75, 0)}
               className="text-white bg-blue-700 hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >
               Get Plan
@@ -226,7 +225,7 @@ const Pricing = () => {
               </li>
             </ul>
             <button
-              onClick={()=>handleClick("Company" , 180 , 0)}
+              onClick={() => handleClick("Company", 180, 0)}
               className="text-white bg-blue-700 hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >
               Get Plan
@@ -329,7 +328,7 @@ const Pricing = () => {
               </li>
             </ul>
             <button
-              onClick={()=>handleClick('Enterprise' , 350 , 0)}
+              onClick={() => handleClick("Enterprise", 350, 0)}
               className="text-white bg-blue-700 hover:bg-primary-700 focus:ring-4 focus:ring-primary-200 font-medium rounded-lg text-sm px-5 py-2.5 text-center"
             >
               Get Plan
