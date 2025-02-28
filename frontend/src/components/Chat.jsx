@@ -1,6 +1,6 @@
 import { useContext, useRef, useEffect, useState } from "react";
 import assets from "../assets/assets.js";
-import { Context } from "src/context/Context";
+import { Context } from "/src/context/Context";
 import { FaRegUser } from "react-icons/fa";
 import { GiArtificialIntelligence } from "react-icons/gi";
 

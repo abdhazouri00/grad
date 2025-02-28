@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
-import { Context } from "src/context/Context";
+import { Context } from "/src/context/Context";
 import { Link } from "react-router";
 import {
   Description,
@@ -26,14 +26,14 @@ const Generate = () => {
   const updateUserCredit = async (userId, amount) => {
     try {
       console.log(userId);
-      
+
       const response = await axios.put(`${backendUrl}/api/user/updateCredit`, {
         userId,
         amount,
       });
 
-      setCredit(response.data.user.credit)
-      
+      setCredit(response.data.user.credit);
+
       console.log(response.data);
     } catch (error) {
       console.error(error.response);

@@ -1,17 +1,17 @@
 import React, { useEffect, useContext, useState } from "react";
 import axios from "axios";
-import { Context } from "src/context/Context";
+import { Context } from "/src/context/Context";
 
 const UserPage = () => {
-  const { backendUrl, token, id } = useContext(Context); 
-  
-  const [info , setInfo] = useState({})
+  const { backendUrl, token, id } = useContext(Context);
+
+  const [info, setInfo] = useState({});
 
   const getInfo = async () => {
     try {
       const response = await axios.get(`${backendUrl}/api/user/${id}`);
       console.log(response.data);
-      setInfo(response.data)
+      setInfo(response.data);
     } catch (error) {
       console.error("Error fetching user info:", error);
     }
@@ -19,9 +19,9 @@ const UserPage = () => {
 
   useEffect(() => {
     if (token) {
-      getInfo(); 
+      getInfo();
     }
-  }, [token]); 
+  }, [token]);
 
   return (
     <div>

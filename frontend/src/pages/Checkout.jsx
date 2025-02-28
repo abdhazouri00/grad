@@ -1,15 +1,15 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
-import { Context } from "src/context/Context";
+import { Context } from "/src/context/Context";
 import { toast } from "react-toastify";
-import { useNavigate } from 'react-router';
+import { useNavigate } from "react-router";
 
 const Checkout = () => {
   const { info, plan, creditToBuy, planTotal, backendUrl, setCredit } =
     useContext(Context);
 
-  const navigate = useNavigate()
-  
+  const navigate = useNavigate();
+
   const [formData, setFormData] = useState({
     billingEmail: "",
     country: "TR",
@@ -21,7 +21,7 @@ const Checkout = () => {
   const bigAxios = async (userId) => {
     const response = await axios.put(`${backendUrl}/api/user/updateCredit`, {
       userId,
-      amount : creditToBuy,
+      amount: creditToBuy,
       increase: true,
     });
     setCredit(response.data.user.credit);
@@ -55,8 +55,8 @@ const Checkout = () => {
     e.preventDefault();
     try {
       await bigAxios(localStorage.getItem("id"));
-      toast.success("Transaction Successful , Redirecting to Home Page")
-      navigate("/")
+      toast.success("Transaction Successful , Redirecting to Home Page");
+      navigate("/");
     } catch (error) {
       console.error("Error submitting form:", error);
     }
