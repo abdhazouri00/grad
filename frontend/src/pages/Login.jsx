@@ -32,7 +32,7 @@ const Login = () => {
           setToken(response.data.token);
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("id", response.data.id);
-          toast.success("user created successfully");
+          toast.success("User Created Successfully");
           setId(response.data.id);
           setName("");
           setEmail("");
@@ -53,7 +53,7 @@ const Login = () => {
           setToken(response.data.token);
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("id", response.data.id);
-          toast.success("login successful");
+          toast.success("Login Successful");
           setId(response.data.id);
           setName("");
           setEmail("");
