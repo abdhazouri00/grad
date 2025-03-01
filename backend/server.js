@@ -24,6 +24,6 @@ app.get("/", (req, res) => {
   res.send("API ENDPOINT");
 });
 
-app.listen(port, () => {
-  console.log(`app running on ${port}`);
+app.listen(3000, () => {
+  console.log(`app running on 3000`);
 });
