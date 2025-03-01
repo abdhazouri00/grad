@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { Context } from "/src/context/Context";
+import { Context } from "../context/Context.jsx";
 import { useNavigate } from "react-router";
 
 const Pricing = () => {

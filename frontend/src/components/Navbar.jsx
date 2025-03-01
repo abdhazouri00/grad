@@ -2,7 +2,7 @@ import React, { useContext, useState, useEffect } from "react";
 import { Link, NavLink, useNavigate } from "react-router";
 import assets from "../assets/assets.js";
 import profile from "../assets/profile_icon.png";
-import { Context } from "/src/context/Context";
+import { Context } from "../context/Context.jsx";
 import { Dialog, Transition } from "@headlessui/react";
 
 const Navbar = () => {
