@@ -1,22 +1,85 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Context } from "../context/Context.jsx";
 import { useNavigate } from "react-router";
+import { Link } from "react-router";
+import {
+  Description,
+  Dialog,
+  DialogPanel,
+  DialogTitle,
+} from "@headlessui/react";
 
 const Pricing = () => {
   const { setPlan, setCreditToBuy, setPlanTotal } = useContext(Context);
 
   const navigate = useNavigate();
 
+  let [isOpen, setIsOpen] = useState(false);
+
   const handleClick = (a, b, c) => {
-    setPlan(a);
-    setCreditToBuy(b);
-    setPlanTotal(c);
-    navigate("/checkout");
+    if (!localStorage.getItem("id")) {
+      setIsOpen(true);
+    } else if (localStorage.getItem("id")) {
+      setPlan(a);
+      setCreditToBuy(b);
+      setPlanTotal(c);
+      navigate("/checkout");
+    }
   };
 
   return (
     <section className="bg-white">
       <div className="py-8 px-4 mx-auto max-w-screen-xl lg:py-16 lg:px-6">
+        <Dialog
+          open={isOpen}
+          onClose={() => setIsOpen(false)}
+          className="relative z-50"
+        >
+          <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
+
+          <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
+            <DialogPanel className="max-w-lg space-y-4 border bg-white p-6 rounded-lg shadow-lg">
+              <DialogTitle className="font-bold text-gray-800 text-lg">
+                Login Required
+              </DialogTitle>
+              <Description className="text-gray-700">
+                You must be logged in to make a subscription. Please sign in or
+                create an account to continue.
+              </Description>
+              <p className="text-sm text-blue-700">
+                <Link
+                  to="/login"
+                  className="inline-flex font-medium items-center text-blue-600 hover:underline"
+                >
+                  Login or SignUp
+                  <svg
+                    className="w-3 h-3 ms-2.5 rtl:rotate-[270deg]"
+                    aria-hidden="true"
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 18 18"
+                  >
+                    <path
+                      stroke="currentColor"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth="2"
+                      d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"
+                    />
+                  </svg>
+                </Link>
+              </p>
+              <div className="flex gap-4">
+                <button
+                  onClick={() => setIsOpen(false)}
+                  className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400"
+                >
+                  Cancel
+                </button>
+              </div>
+            </DialogPanel>
+          </div>
+        </Dialog>
         <div className="mx-auto max-w-screen-md text-center mb-8 lg:mb-12">
           <h2 className="mb-4 text-4xl tracking-tight font-extrabold text-gray-900">
             Designed for business teams like yours

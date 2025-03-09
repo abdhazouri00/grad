@@ -28,9 +28,15 @@ const Navbar = () => {
     localStorage.removeItem("token");
     setToken("");
     localStorage.removeItem("id");
+    setInfo({})
     setCredit(localStorage.getItem("credit"));
     setId("");
     navigate("/login");
+  };
+
+  const smallLogout = () => {
+    logout();
+    setIsOpen(false);
   };
 
   const handleNavigate = () => {
@@ -208,7 +214,7 @@ const Navbar = () => {
                                   </button>
                                   <button
                                     className="px-4 py-2 bg-red-500 text-white rounded-md hover:bg-gray-600"
-                                    onClick={() => logout()}
+                                    onClick={() => smallLogout()}
                                   >
                                     Logout
                                   </button>

@@ -60,6 +60,30 @@ const updateUserCredit = async (req, res) => {
   }
 };
 
+const updatePlan = async (req, res) => {
+  try {
+    const { userId, plan } = req.body;
+
+    if (!userId || plan === undefined) {
+      return res
+        .status(400)
+        .json({ message: "User ID and plan are required." });
+    }
+
+    const user = await userModel.findById(userId);
+    if (!user) {
+      return res.status(404).json({ message: "User not found." });
+    }
+
+    user.plan = plan;
+    await user.save();
+
+    res.status(200).json({ message: "plan updated successfully.", user });
+  } catch (error) {
+    res.status(500).json({ message: "Internal server error.", error });
+  }
+};
+
 const updateBillingEmail = async (req, res) => {
   try {
     const { userId, email } = req.body;
@@ -358,4 +382,5 @@ export {
   updateCity,
   updatePhoneNumber,
   updateCompany,
+  updatePlan,
 };

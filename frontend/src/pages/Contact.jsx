@@ -1,7 +1,10 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
+import emailjs from "emailjs-com";
 
 const Contact = () => {
+  const form = useRef();
+
   const [formData, setFormData] = useState({
     firstName: "",
     lastName: "",
@@ -10,7 +13,7 @@ const Contact = () => {
     message: "",
   });
 
-  const [isOpen, setIsOpen] = useState(false); // State to control modal visibility
+  const [isOpen, setIsOpen] = useState(false);
 
   const handleInputChange = (e) => {
     const { id, value } = e.target;
@@ -22,8 +25,12 @@ const Contact = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    console.log("Form Data Submitted:", formData);
-    setIsOpen(true); // Open the modal on successful submission
+    emailjs
+      .sendForm("123", "template_qlgkgf2", form.current, "l1mqom8P0_iEoZaYD")
+      .then((error) => {
+        console.log("FAILED...", error);
+      });
+    setIsOpen(true);
     setFormData({
       firstName: "",
       lastName: "",
@@ -34,7 +41,7 @@ const Contact = () => {
   };
 
   const closeModal = () => {
-    setIsOpen(false); // Close the modal
+    setIsOpen(false);
   };
 
   return (
@@ -44,10 +51,10 @@ const Contact = () => {
           Contact Us
         </h2>
         <p className="mb-8 lg:mb-16 font-light text-center text-gray-500 sm:text-xl">
-          Got a technical issue? Want to send a feedback?
-          Need details about a Business plan? Let us know.
+          Got a technical issue? Want to send a feedback? Need details about a
+          Business plan? Let us know.
         </p>
-        <form onSubmit={handleSubmit} className="space-y-8">
+        <form ref={form} onSubmit={handleSubmit} className="space-y-8">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label
@@ -59,6 +66,7 @@ const Contact = () => {
               <input
                 type="text"
                 id="firstName"
+                name="user_fname"
                 value={formData.firstName}
                 onChange={handleInputChange}
                 className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
@@ -77,6 +85,7 @@ const Contact = () => {
                 type="text"
                 id="lastName"
                 value={formData.lastName}
+                name="user_lname"
                 onChange={handleInputChange}
                 className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
                 placeholder="Doe"
@@ -96,10 +105,11 @@ const Contact = () => {
             <input
               type="email"
               id="email"
+              name="user_email"
               value={formData.email}
               onChange={handleInputChange}
               className="shadow-sm bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-primary-500 focus:border-primary-500 block w-full p-2.5"
-              placeholder="name@flowbite.com"
+              placeholder="abdhazouritr@gmail.com"
               required
             />
           </div>
@@ -115,6 +125,7 @@ const Contact = () => {
             <input
               type="text"
               id="subject"
+              name="user_subject"
               value={formData.subject}
               onChange={handleInputChange}
               className="block p-3 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 shadow-sm focus:ring-primary-500 focus:border-primary-500"
@@ -133,6 +144,7 @@ const Contact = () => {
             <textarea
               id="message"
               rows="6"
+              name="user_message"
               value={formData.message}
               onChange={handleInputChange}
               className="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg shadow-sm border border-gray-300 focus:ring-primary-500 focus:border-primary-500"
@@ -143,7 +155,8 @@ const Contact = () => {
           {/* Submit Button */}
           <button
             type="submit"
-            className="py-3 px-5 text-sm font-medium text-center text-white rounded-lg bg-stone-700 sm:w-fit hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300"
+            value="Send"
+            className="py-3 px-5 text-sm font-medium text-center text-white rounded-lg bg-blue-700 sm:w-fit hover:bg-primary-800 focus:ring-4 focus:outline-none focus:ring-primary-300"
           >
             Send message
           </button>
@@ -192,7 +205,7 @@ const Contact = () => {
                   <div className="mt-4">
                     <button
                       type="button"
-                      className="inline-flex justify-center rounded-md border border-transparent bg-stone-700 px-4 py-2 text-sm font-medium text-white hover:bg-stone-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-stone-500 focus-visible:ring-offset-2"
+                      className="inline-flex justify-center rounded-md border border-transparent bg-blue-700 px-4 py-2 text-sm font-medium text-white hover:bg-stone-800 focus:outline-none focus-visible:ring-2 focus-visible:ring-stone-500 focus-visible:ring-offset-2"
                       onClick={closeModal}
                     >
                       Close

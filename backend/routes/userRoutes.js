@@ -12,6 +12,7 @@ import {
   updateCity,
   updatePhoneNumber,
   updateCompany,
+  updatePlan,
 } from "../controllers/userController.js";
 
 const userRouter = express.Router();
@@ -39,6 +40,8 @@ userRouter.put("/updateCity", updateCity);
 userRouter.put("/updatePhoneNumber", updatePhoneNumber);
 
 userRouter.put("/updateCompany", updateCompany);
+
+userRouter.put("/updatePlan", updatePlan);
 
 
 export default userRouter;

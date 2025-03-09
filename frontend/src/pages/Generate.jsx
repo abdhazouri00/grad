@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import { Context } from "../context/Context.jsx";
-import { Link } from "react-router";
+import { Link, useNavigate } from "react-router";
 import {
   Description,
   Dialog,
@@ -12,6 +12,7 @@ import {
 const Generate = () => {
   let [isOpen, setIsOpen] = useState(false);
   const { credit, setCredit, loggedIn, backendUrl, id } = useContext(Context);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
     projectName: "",
@@ -33,7 +34,6 @@ const Generate = () => {
       });
 
       setCredit(response.data.user.credit);
-
       console.log(response.data);
     } catch (error) {
       console.error(error.response);
@@ -76,7 +76,7 @@ const Generate = () => {
       // console.log("Response:", response.data);
       console.log(formData);
 
-      if (!loggedIn) {
+      if (!localStorage.getItem("id")) {
         if (formData.docDepth === "simple") {
           localStorage.setItem("credit", localStorage.getItem("credit") - 3);
           setCredit(localStorage.getItem("credit"));
@@ -87,7 +87,7 @@ const Generate = () => {
           localStorage.setItem("credit", localStorage.getItem("credit") - 5);
           setCredit(localStorage.getItem("credit"));
         }
-      } else if (loggedIn) {
+      } else if (localStorage.getItem("id")) {
         if (formData.docDepth === "simple") {
           updateUserCredit(id, 3);
         } else if (formData.docDepth === "moderate") {
@@ -96,6 +96,8 @@ const Generate = () => {
           updateUserCredit(id, 5);
         }
       }
+
+      navigate("/view");
     } catch (error) {
       console.error("Error submitting form:", error);
     }
@@ -288,7 +290,7 @@ const Generate = () => {
 
           <button
             type="submit"
-            className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-gray-700 rounded-lg focus:ring-4 focus:ring-primary-200 hover:bg-primary-800"
+            className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-gray-600 rounded-lg focus:ring-4 focus:ring-primary-200 hover:bg-primary-800"
           >
             Generate
           </button>
