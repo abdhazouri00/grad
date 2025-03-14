@@ -21,47 +21,56 @@ const Login = () => {
 
     try {
       if (currentState === "Sign Up") {
-        const response = await axios.post(backendUrl + "/api/user/register", {
-          name,
-          email,
-          password,
-          credit: localStorage.getItem("credit"),
-        });
-
-        if (response.data.statusCode === 200) {
-          setToken(response.data.token);
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("id", response.data.id);
-          toast.success("User Created Successfully");
-          setId(response.data.id);
-          setName("");
-          setEmail("");
-          setPassword("");
-          setLoggedIn(true);
-        } else {
-          toast.error(response.data.message);
-        }
+        toast.promise(
+          axios.post(backendUrl + "/api/user/register", {
+            name,
+            email,
+            password,
+            credit: localStorage.getItem("credit"),
+          }),
+          {
+            pending: "Creating account...",
+            success: {
+              render({ data }) {
+                setToken(data.data.token);
+                localStorage.setItem("token", data.data.token);
+                localStorage.setItem("id", data.data.id);
+                setId(data.data.id);
+                setName("");
+                setEmail("");
+                setPassword("");
+                setLoggedIn(true);
+                return "User Created Successfully";
+              },
+            },
+            error: "Sign-up failed. Please try again.",
+          }
+        );
       } else {
-        const response = await axios.post(backendUrl + "/api/user/login", {
-          email,
-          password,
-        });
-
-        if (response.data.statusCode === 200) {
-          console.log(response.data);
-          setCredit(response.data.credit);
-          setToken(response.data.token);
-          localStorage.setItem("token", response.data.token);
-          localStorage.setItem("id", response.data.id);
-          toast.success("Login Successful");
-          setId(response.data.id);
-          setName("");
-          setEmail("");
-          setPassword("");
-          setLoggedIn(true);
-        } else {
-          toast.error(response.data.message);
-        }
+        toast.promise(
+          axios.post(backendUrl + "/api/user/login", {
+            email,
+            password,
+          }),
+          {
+            pending: "Logging in...",
+            success: {
+              render({ data }) {
+                setCredit(data.data.credit);
+                setToken(data.data.token);
+                localStorage.setItem("token", data.data.token);
+                localStorage.setItem("id", data.data.id);
+                setId(data.data.id);
+                setName("");
+                setEmail("");
+                setPassword("");
+                setLoggedIn(true);
+                return "Login Successful";
+              },
+            },
+            error: "Login failed. Please check your credentials.",
+          }
+        );
       }
     } catch (error) {
       console.error(error);

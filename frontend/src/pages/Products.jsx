@@ -4,7 +4,7 @@ import Product from "../components/Product";
 const Products = () => {
   return (
     <>
-      <div className="flex flex-col justify-center items-center h-32 space-y-4 mt-10 mb-20">
+      <div className="flex flex-col justify-center items-center h-32 space-y-4 mt-40 sm:mt-10 mb-20">
         <h1 className="text-4xl font-bold text-center">Our Products</h1>
         <p className="text-center text-gray-600 max-w-3xl mx-auto text-lg leading-relaxed">
           Our AI agent is trained to generate a wide range of professional and

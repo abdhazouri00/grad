@@ -51,7 +51,7 @@ const Pricing = () => {
                   to="/login"
                   className="inline-flex font-medium items-center text-blue-600 hover:underline"
                 >
-                  Login or SignUp
+                  Login or Sign Up
                   <svg
                     className="w-3 h-3 ms-2.5 rtl:rotate-[270deg]"
                     aria-hidden="true"
