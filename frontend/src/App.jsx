@@ -18,6 +18,7 @@ const App = () => {
   const location = useLocation();
   const applyPadding = location.pathname !== "/view";
   const showFooter = location.pathname !== "/view";
+  const showNavbar = location.pathname !== "/view"; // New condition for Navbar
 
   return (
     <>

@@ -26,6 +26,7 @@ const Navbar = () => {
 
   const logout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("chatToken")
     setToken("");
     localStorage.removeItem("id");
     setInfo({})

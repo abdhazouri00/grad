@@ -18,10 +18,12 @@ const ContextProvider = (props) => {
   const [chats, setChats] = useState([]);
   const [credit, setCredit] = useState();
   const [loggedIn, setLoggedIn] = useState(false);
-  const [plan, setPlan] = useState("")
-  const [creditToBuy, setCreditToBuy] = useState(null)
-  const [planTotal , setPlanTotal] = useState(null)
+  const [plan, setPlan] = useState("");
+  const [creditToBuy, setCreditToBuy] = useState(null);
+  const [planTotal, setPlanTotal] = useState(null);
+  const [conversationId, setConversationId] = useState(null);
   const backendUrl = import.meta.env.VITE_BACKEND;
+  const chatbot = import.meta.env.VITE_CHATBOT_URL;
   const newMessagesRef = useRef([]);
 
   const getInfo = async () => {
@@ -37,19 +39,6 @@ const ContextProvider = (props) => {
     }
   };
 
-  const saveChat = async (userId, messages) => {
-    try {
-      console.log("saving chat");
-      const response = await axios.post(`${backendUrl}/api/user/saveChat`, {
-        userId,
-        messages,
-      });
-
-      setChatId(response.data.chat.chatId);
-    } catch (error) {
-      console.error("Error saving chat:", error);
-    }
-  };
 
   const updateChat = async (userId, chatId, messages) => {
     try {
@@ -168,7 +157,10 @@ const ContextProvider = (props) => {
     creditToBuy,
     setCreditToBuy,
     planTotal,
-    setPlanTotal
+    setPlanTotal,
+    chatbot,
+    conversationId,
+    setConversationId,
   };
 
   return (

@@ -27,7 +27,7 @@ function Prompt({ onChat, readyMsg }) {
       formData.append("file", file);
     }
 
-    const response = await run(input + "give answer maximum 6 lines");
+    const response = await run(input);
 
     setInput("");
     setFile(null);

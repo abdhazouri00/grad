@@ -4,7 +4,7 @@ import assets from "../assets/assets.js";
 
 const Sidebar = () => {
   const [extended, setExtended] = useState(false);
-  const { onSent, setRecentPrompt, setConversation, chats, setNewChat } =
+  const { onSent, setRecentPrompt, setConversation, chats, setNewChat , conversationId , setConversationId } =
     useContext(Context);
 
   const handleExtend = () => {
@@ -28,10 +28,10 @@ const Sidebar = () => {
         {extended ? (
           <div className="recent flex flex-col animate-fadeIn">
             <p className="recent-title mt-[30px] mb-[20px]">Recent</p>
-            {chats.map((item, index) => {
+            {chats.slice().reverse().map((item, index) => {
               return (
                 <div
-                  onClick={() => handleClick(item)}
+                  onClick={() => setConversationId(item.chatId)}
                   key={index}
                   className="recent-entry flex items-start gap-[10px] p-[10px] pr-[40px] rounded-full text-[#282828] cursor-pointer hover:bg-[#e2e6eb]"
                 >

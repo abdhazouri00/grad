@@ -7,8 +7,15 @@ import { useNavigate } from "react-router";
 const Login = () => {
   const [currentState, setCurrentState] = useState("Login");
 
-  const { token, setToken, backendUrl, setId, setCredit, setLoggedIn } =
-    useContext(Context);
+  const {
+    token,
+    setToken,
+    backendUrl,
+    setId,
+    setCredit,
+    setLoggedIn,
+    chatbot,
+  } = useContext(Context);
 
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
@@ -22,12 +29,26 @@ const Login = () => {
     try {
       if (currentState === "Sign Up") {
         toast.promise(
-          axios.post(backendUrl + "/api/user/register", {
-            name,
-            email,
-            password,
-            credit: localStorage.getItem("credit"),
-          }),
+          (async () => {
+            const response = await axios.post(chatbot + "/users", {
+              name,
+            });
+            console.log(response);
+
+            localStorage.setItem("chatToken", response.data.key);
+
+            console.log(localStorage.getItem("chatToken"));
+            
+
+            return axios.post(backendUrl + "/api/user/register", {
+              name,
+              email,
+              password,
+              chatId: response.data.user.id,
+              chatToken: response.data.key,
+              credit: localStorage.getItem("credit"),
+            });
+          })(),
           {
             pending: "Creating account...",
             success: {
@@ -58,6 +79,7 @@ const Login = () => {
               render({ data }) {
                 setCredit(data.data.credit);
                 setToken(data.data.token);
+                localStorage.setItem("chatToken" , data.data.chatToken)
                 localStorage.setItem("token", data.data.token);
                 localStorage.setItem("id", data.data.id);
                 setId(data.data.id);

@@ -1,7 +1,7 @@
 import React, { useContext, useState } from "react";
 import axios from "axios";
 import { Context } from "../context/Context.jsx";
-import { Link, useNavigate } from "react-router";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Description,
   Dialog,
@@ -10,8 +10,9 @@ import {
 } from "@headlessui/react";
 
 const Generate = () => {
-  let [isOpen, setIsOpen] = useState(false);
-  const { credit, setCredit, loggedIn, backendUrl, id } = useContext(Context);
+  const [isOpen, setIsOpen] = useState(false);
+  const { credit, setCredit, backendUrl, id, chatbot, setConversationId } =
+    useContext(Context);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -24,17 +25,25 @@ const Generate = () => {
     temp: null,
   });
 
+  const saveChat = async (userId, chatId, title) => {
+    try {
+      await axios.post(`${backendUrl}/api/user/saveChat`, {
+        userId,
+        chatId,
+        title,
+      });
+    } catch (error) {
+      console.error("Error saving chat:", error);
+    }
+  };
+
   const updateUserCredit = async (userId, amount) => {
     try {
-      console.log(userId);
-
       const response = await axios.put(`${backendUrl}/api/user/updateCredit`, {
         userId,
         amount,
       });
-
       setCredit(response.data.user.credit);
-      console.log(response.data);
     } catch (error) {
       console.error(error.response);
     }
@@ -42,64 +51,83 @@ const Generate = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    setFormData((prevData) => ({ ...prevData, [name]: value }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleFileChange = (e) => {
-    setFormData((prevData) => ({ ...prevData, temp: e.target.files[0] }));
+    setFormData((prev) => ({ ...prev, temp: e.target.files[0] }));
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const formDataToSend = new FormData();
-    Object.keys(formData).forEach((key) => {
-      formDataToSend.append(key, formData[key]);
-    });
-
-    if (
-      (formData.docDepth === "simple" && credit < 3) ||
-      (formData.docDepth === "moderate" && credit < 4) ||
-      (formData.docDepth === "complex" && credit < 5)
-    ) {
+    const creditRequirements = { simple: 3, moderate: 4, complex: 5 };
+    if (credit < creditRequirements[formData.docDepth]) {
       setIsOpen(true);
       return;
     }
-    try {
-      // const response = await axios.post(
-      //   "http://localhost:3000/formsubmit",
-      //   formDataToSend,
-      //   {
-      //     headers: { "Content-Type": "multipart/form-data" },
-      //   }
-      // );
-      // console.log("Response:", response.data);
-      console.log(formData);
 
-      if (!localStorage.getItem("id")) {
-        if (formData.docDepth === "simple") {
-          localStorage.setItem("credit", localStorage.getItem("credit") - 3);
-          setCredit(localStorage.getItem("credit"));
-        } else if (formData.docDepth === "moderate") {
-          localStorage.setItem("credit", localStorage.getItem("credit") - 4);
-          setCredit(localStorage.getItem("credit"));
-        } else if (formData.docDepth === "complex") {
-          localStorage.setItem("credit", localStorage.getItem("credit") - 5);
-          setCredit(localStorage.getItem("credit"));
+    try {
+      // Create conversation
+      const convRes = await axios.post(
+        `${chatbot}/conversations`,
+        {},
+        {
+          headers: {
+            accept: "application/json",
+            "x-user-key": localStorage.getItem("chatToken"),
+            "content-type": "application/json",
+          },
         }
-      } else if (localStorage.getItem("id")) {
-        if (formData.docDepth === "simple") {
-          updateUserCredit(id, 3);
-        } else if (formData.docDepth === "moderate") {
-          updateUserCredit(id, 4);
-        } else if (formData.docDepth === "complex") {
-          updateUserCredit(id, 5);
+      );
+
+      const newConvId = convRes.data.conversation.id;
+      setConversationId(newConvId);
+
+      // Send initial message
+      const message = `Project Title: ${formData.projectName}\nDescription: ${formData.desc}\nFeatures: ${formData.features}\nPreferences and Tools: ${formData.prefTools}`;
+
+      await axios.post(
+        `${chatbot}/messages`,
+        {
+          payload: { type: "text", text: message },
+          conversationId: newConvId,
+        },
+        {
+          headers: {
+            accept: "application/json",
+            "x-user-key": localStorage.getItem("chatToken"),
+            "content-type": "application/json",
+          },
         }
+      );
+
+      // Update credits
+      const creditDeduction = creditRequirements[formData.docDepth];
+      if (localStorage.getItem("id")) {
+        await updateUserCredit(id, creditDeduction);
+        await saveChat(
+          localStorage.getItem("id"),
+          newConvId,
+          formData.projectName
+        );
+      } else {
+        const newCredit =
+          Number(localStorage.getItem("credit")) - creditDeduction;
+        localStorage.setItem("credit", newCredit);
+        setCredit(newCredit);
       }
 
-      navigate("/view");
+      navigate("/view", {
+        state: {
+          initialMessage: message,
+          conversationId: newConvId,
+          projectName: formData.projectName,
+        },
+      });
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("Submission error:", error);
+      toast.error("Failed to generate document. Please try again.");
     }
   };
 
@@ -115,43 +143,25 @@ const Generate = () => {
           onClose={() => setIsOpen(false)}
           className="relative z-50"
         >
-          <div className="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm"></div>
-
-          <div className="fixed inset-0 flex w-screen items-center justify-center p-4">
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+          <div className="fixed inset-0 flex items-center justify-center p-4">
             <DialogPanel className="max-w-lg space-y-4 border bg-white p-6 rounded-lg shadow-lg">
               <DialogTitle className="font-bold text-gray-800 text-lg">
                 Not Enough Credit
               </DialogTitle>
               <Description className="text-gray-700">
-                You dont have enough credit to continue the process
+                You don't have enough credit to continue the process
               </Description>
-              <p className="text-sm text-blue-700">
+              <div className="flex gap-4 mt-4">
                 <Link
                   to="/pricing"
-                  className="inline-flex font-medium items-center text-blue-600 hover:underline"
+                  className="text-sm text-blue-600 hover:underline font-medium"
                 >
                   See Pricing Plans
-                  <svg
-                    className="w-3 h-3 ms-2.5 rtl:rotate-[270deg]"
-                    aria-hidden="true"
-                    xmlns="http://www.w3.org/2000/svg"
-                    fill="none"
-                    viewBox="0 0 18 18"
-                  >
-                    <path
-                      stroke="currentColor"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      d="M15 11v4.833A1.166 1.166 0 0 1 13.833 17H2.167A1.167 1.167 0 0 1 1 15.833V4.167A1.166 1.166 0 0 1 2.167 3h4.618m4.447-2H17v5.768M9.111 8.889l7.778-7.778"
-                    />
-                  </svg>
                 </Link>
-              </p>
-              <div className="flex gap-4">
                 <button
                   onClick={() => setIsOpen(false)}
-                  className="px-4 py-2 bg-gray-300 text-gray-800 rounded-md hover:bg-gray-400"
+                  className="px-4 py-2 bg-gray-300 rounded-md"
                 >
                   Cancel
                 </button>
@@ -287,10 +297,9 @@ const Generate = () => {
             </label>
             <input type="file" name="temp" onChange={handleFileChange} />
           </div>
-
           <button
             type="submit"
-            className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-gray-600 rounded-lg focus:ring-4 focus:ring-primary-200 hover:bg-primary-800"
+            className="inline-flex items-center px-5 py-2.5 mt-4 sm:mt-6 text-sm font-medium text-center text-white bg-gray-600 rounded-lg hover:bg-gray-700"
           >
             Generate
           </button>
