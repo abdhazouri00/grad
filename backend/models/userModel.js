@@ -7,10 +7,9 @@ const messageSchema = new mongoose.Schema({
 });
 
 const chatSchema = new mongoose.Schema({
-  title: { type: String, default: "Chat" },
+  title: { type: String },
   chatId: {
-    type: mongoose.Schema.Types.ObjectId,
-    default: new mongoose.Types.ObjectId(),
+    type: String,
   },
   messages: [messageSchema],
 });
@@ -28,6 +27,8 @@ const userSchema = new mongoose.Schema(
     plan: { type: String, default: "None" },
     credit: { type: Number },
     chats: [chatSchema],
+    chatToken: { type: String },
+    chatId : {type : String},
   },
   { minimize: false }
 );

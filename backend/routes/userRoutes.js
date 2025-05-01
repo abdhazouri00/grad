@@ -13,6 +13,8 @@ import {
   updatePhoneNumber,
   updateCompany,
   updatePlan,
+  fetchMessages,
+  getLastChat,
 } from "../controllers/userController.js";
 
 const userRouter = express.Router();
@@ -43,5 +45,8 @@ userRouter.put("/updateCompany", updateCompany);
 
 userRouter.put("/updatePlan", updatePlan);
 
+userRouter.post("/getLastChatId", getLastChat);
+
+userRouter.post("/fetchMessages", fetchMessages);
 
 export default userRouter;

@@ -251,6 +251,7 @@ const loginUser = async (req, res) => {
       statusCode: 200,
       message: "Login successful",
       token: token,
+      chatToken: user.chatToken,
       id: user._id,
       credit: user.credit,
     };
@@ -271,7 +272,7 @@ const loginUser = async (req, res) => {
 
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password, credit } = req.body;
+    const { name, email, password, credit, chatToken, chatId } = req.body;
 
     const exists = await userModel.findOne({ email });
 
@@ -307,6 +308,8 @@ const registerUser = async (req, res) => {
       email,
       password: hashedPassword,
       credit,
+      chatToken,
+      chatId,
     });
 
     const user = await newUser.save();
@@ -318,6 +321,7 @@ const registerUser = async (req, res) => {
       message: "user created",
       token: token,
       id: user._id,
+      chatToken: chatToken,
     });
   } catch (error) {
     console.error(error);
@@ -328,17 +332,38 @@ const registerUser = async (req, res) => {
   }
 };
 
+// const saveChat = async (req, res) => {
+//   const { userId, messages } = req.body;
+
+//   try {
+//     const user = await userModel.findById(userId);
+//     if (!user) return res.status(404).json({ message: "User not found" });
+
+//     const newChat = {
+//       chatId: new mongoose.Types.ObjectId(),
+//       title: "chat",
+//       messages: messages || [],
+//     };
+
+//     user.chats.push(newChat);
+//     await user.save();
+
+//     res.status(201).json({ message: "Chat added successfully", chat: newChat });
+//   } catch (error) {
+//     res.status(500).json({ message: error.message });
+//   }
+// };
+
 const saveChat = async (req, res) => {
-  const { userId, messages } = req.body;
+  const { userId, chatId, title } = req.body;
 
   try {
     const user = await userModel.findById(userId);
     if (!user) return res.status(404).json({ message: "User not found" });
 
     const newChat = {
-      chatId: new mongoose.Types.ObjectId(),
-      title: "chat",
-      messages: messages || [],
+      chatId,
+      title,
     };
 
     user.chats.push(newChat);
@@ -360,7 +385,7 @@ const updateChat = async (req, res) => {
     const chat = user.chats.find((chat) => chat.chatId.toString() === chatId);
     if (!chat) return res.status(404).json({ message: "Chat not found" });
 
-    chat.messages.push(...messages);
+    chat.messages.push(messages);
     await user.save();
 
     res.json({ message: "Messages added", chat });
@@ -368,6 +393,41 @@ const updateChat = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+const fetchMessages = async (req, res) => {
+  const { userId, chatId } = req.body;
+
+  try {
+    const user = await userModel.findById(userId);
+    if (!user) return res.status(404).json({ message: "User not found" });
+
+    const chat = user.chats.find((chat) => chat.chatId.toString() === chatId);
+    if (!chat) return res.status(404).json({ message: "Chat not found" });
+
+    res.json({ messages : chat.messages });
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+};
+
+  const getLastChat = async (req, res) => {
+    const { userId } = req.body;
+
+    try {
+      const user = await userModel.findById(userId);
+      if (!user) return res.status(404).json({ message: "User not found" });
+
+      // Check if the user has any chats
+      if (user.chats && user.chats.length > 0) {
+        const chat = user.chats[user.chats.length - 1];
+        return res.json({ message: chat });
+      } else {
+        return res.status(404).json({ message: "No chats found for this user" });
+      }
+    } catch (error) {
+      res.status(500).json({ message: error.message });
+    }
+  };
 
 export {
   loginUser,
@@ -383,4 +443,6 @@ export {
   updatePhoneNumber,
   updateCompany,
   updatePlan,
+  getLastChat,
+  fetchMessages,
 };
