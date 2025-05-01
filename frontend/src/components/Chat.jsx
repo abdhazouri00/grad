@@ -11,11 +11,12 @@ const Chat = ({
   reloadConversation,
   setFileUrl,
 }) => {
-  const { chatbot } = useContext(Context);
+  const { chatbot, backendUrl } = useContext(Context);
   const [input, setInput] = useState("");
   const [lastUserInput, setLastUserInput] = useState("");
   const [pollingInterval, setPollingInterval] = useState(null);
   const [isWaitingForResponse, setIsWaitingForResponse] = useState(false);
+  const [usersMessages, setUsersMessages] = useState([]);
   const messagesEndRef = useRef(null);
 
   const searchForFile = () => {
@@ -27,6 +28,38 @@ const Chat = ({
     }
   };
 
+  const updateMessages = async (userId, messages, chatId) => {
+    try {
+      const response = await axios.put(`${backendUrl}/api/user/updateChat`, {
+        userId,
+        messages,
+        chatId,
+      });
+
+      console.log(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
+  const fetchMessages = async (chatId) => {
+    try {
+      const userId = localStorage.getItem("id");
+      const response = await axios.post(
+        `${backendUrl}/api/user/fetchMessages`,
+        { userId, chatId }
+      );
+
+      // Extract just the message content for user messages
+      const userMessages = response.data.messages
+        .filter((msg) => msg.role === "user")
+        .map((msg) => msg.content);
+
+      setUsersMessages(userMessages);
+    } catch (error) {
+      console.error(error);
+    }
+  };
   // useEffect(() => {
 
   //   const token = localStorage.getItem(
@@ -100,6 +133,10 @@ const Chat = ({
     searchForFile();
   }, [chatConversation]);
 
+  useEffect(() => {
+    fetchMessages(conversationId);
+  }, [conversationId]);
+
   // Start polling when component mounts
   useEffect(() => {
     const startPolling = () => {
@@ -145,7 +182,7 @@ const Chat = ({
         clearInterval(interval);
       }
     };
-  }, [conversationId]); // Add dependencies as needed
+  }, [conversationId]);
 
   useEffect(() => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -182,6 +219,14 @@ const Chat = ({
             "content-type": "application/json",
           },
         }
+      );
+
+      setUsersMessages((prev) => [...prev, input]);
+
+      await updateMessages(
+        localStorage.getItem("id"),
+        { role: "user", content: input },
+        conversationId
       );
 
       setInput("");
@@ -227,7 +272,16 @@ const Chat = ({
         ) : (
           <div className="conversation px-[5%] max-h-[80vh] overflow-y-auto mb-20">
             {[...chatConversation].reverse().map((message, index) => {
-              const role = index % 2 === 0 ? "assistant" : "user";
+              // const role = index % 2 === 0 ? "assistant" : "user";
+             const messageContent =
+               message.payload.text || message.payload.title || "";
+
+             // Check if this content exists in user messages
+             const isUserMessage = usersMessages.some(
+               (userMsg) => userMsg === messageContent
+             );
+
+             const role = isUserMessage ? "user" : "assistant";
 
               return (
                 <div key={index} className={`message ${role} my-4`}>

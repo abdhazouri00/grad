@@ -73,3 +73,15 @@ a.active div {
     transform: rotate(360deg);
   }
 } 
+
+@keyframes discoGlow {
+  0% { text-shadow: 0 0 0px red; color: red; }
+  20% { text-shadow: 0 0 0px orange; color: orange; }
+  40% { text-shadow: 0 0 0px yellow; color: yellow; }
+  60% { text-shadow: 0 0 0px green; color: green; }
+  80% { text-shadow: 0 0 0px blue; color: blue; }
+  100% { text-shadow: 0 0 0px violet; color: violet; }
+}
+.disco-hover:hover {
+  animation: discoGlow 1.2s infinite linear;
+}

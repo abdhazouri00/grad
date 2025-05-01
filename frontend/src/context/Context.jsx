@@ -161,6 +161,7 @@ const ContextProvider = (props) => {
     chatbot,
     conversationId,
     setConversationId,
+    updateChat,
   };
 
   return (

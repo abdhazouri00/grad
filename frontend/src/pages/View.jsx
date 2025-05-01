@@ -37,8 +37,8 @@ function View() {
 
       setConversation(response.data.messages.slice(0, -2));
 
-      console.log("fetching");
-      console.log(response.data.messages);
+      // console.log("fetching");
+      // console.log(response.data.messages);
 
       if (response.data.messages.length <= 2) {
         setIsLoading(true);

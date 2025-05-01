@@ -39,11 +39,10 @@ const Footer = () => {
           </li>
         </ul>
         <span className="text-sm text-gray-500 sm:text-center -400">
-          © 2024-2025{" "}
-          <a href="#" className="hover:underline">
-            ChronoSpec
-          </a>
-          . All Rights Reserved.
+          © 2024-2025
+          <span className="disco-hover ml-2 cursor-pointer">
+            Abdullah Hazuri <span className="mx-2">·</span>Graduation Project
+          </span>
         </span>
       </div>
     </footer>

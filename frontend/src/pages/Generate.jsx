@@ -11,8 +11,15 @@ import {
 
 const Generate = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const { credit, setCredit, backendUrl, id, chatbot, setConversationId } =
-    useContext(Context);
+  const {
+    credit,
+    setCredit,
+    backendUrl,
+    id,
+    chatbot,
+    setConversationId,
+    updateChat,
+  } = useContext(Context);
   const navigate = useNavigate();
 
   const [formData, setFormData] = useState({
@@ -105,7 +112,7 @@ const Generate = () => {
       // Update credits
       const creditDeduction = creditRequirements[formData.docDepth];
       if (localStorage.getItem("id")) {
-        await updateUserCredit(id, creditDeduction);
+        await updateUserCredit(localStorage.getItem("id"), creditDeduction);
         await saveChat(
           localStorage.getItem("id"),
           newConvId,
