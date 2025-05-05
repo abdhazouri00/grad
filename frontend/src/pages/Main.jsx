@@ -3,7 +3,6 @@ import assets from "../assets/assets";
 import { Link } from "react-router";
 
 const Main = () => {
-
   const scrollToSection = () => {
     document
       .getElementById("how-does-it-work")
@@ -130,8 +129,8 @@ const Main = () => {
           <div className="text-left">
             <h2 className="text-lg font-semibold">4. Customize and Finalize</h2>
             <p className="text-gray-500 font-medium">
-              Edit text, add diagrams, or make any adjustments to tailor the
-              document to your exact specifications using our online editor.
+              Edit text and sections, or make any adjustments to tailor the
+              document to your exact specifications using our AI assistant.
             </p>
           </div>
 
@@ -139,8 +138,7 @@ const Main = () => {
           <div className="text-left">
             <h2 className="text-lg font-semibold">5. Download and Share</h2>
             <p className="text-gray-500 font-medium">
-              Export your finished document in multiple formats and share it
-              effortlessly with your team or clients.
+              You may view and download the completed document in PDF format.
             </p>
           </div>
           <hr />
@@ -267,10 +265,9 @@ const Main = () => {
                   purposes?
                 </h3>
                 <p className="text-gray-500">
-                  Yes, the generated documents adhere to professional standards
-                  and are suitable for most official and academic needs.
-                  However, we recommend reviewing the document to ensure it
-                  meets all your requirements.
+                  No, the generated documents are not guaranteed to meet all
+                  official or academic standards. You must review and revise
+                  them to ensure they fit your specific requirements.
                 </p>
               </div>
               <div className="mb-10">
@@ -291,9 +288,9 @@ const Main = () => {
                   preferences?
                 </h3>
                 <p className="text-gray-500">
-                  Absolutely! You can provide tailored requests, and the
-                  document will be adjusted based on your specific needs,
-                  including formatting and detail levels.
+                  Yes, but the document is not fully tailored. Only small
+                  adjustments can be made for now, such as minor formatting or
+                  detail tweaks.
                 </p>
               </div>
 
@@ -314,9 +311,8 @@ const Main = () => {
                   How responsive is the document generation?
                 </h3>
                 <p className="text-gray-500">
-                  The tool is highly responsive to your questions and requests,
-                  adjusting the document content as needed based on your
-                  feedback.
+                  The tool is responsive to your questions and requests, though
+                  its adaptability is currently limited.
                 </p>
               </div>
               <div className="mb-10">
@@ -336,9 +332,9 @@ const Main = () => {
                   Is the generation accurate?
                 </h3>
                 <p className="text-gray-500">
-                  Yes, the documents generated are highly accurate, following
-                  established standards and best practices. The quality depends
-                  on the inputs and requirements you provide.
+                  The documents generated maintain a basic level of accuracy and
+                  alignment with general standards, though they may not fully
+                  meet all expectations at this stage.
                 </p>
               </div>
             </div>

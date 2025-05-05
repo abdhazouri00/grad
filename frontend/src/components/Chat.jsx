@@ -348,7 +348,7 @@ const Chat = ({
           </form>
           <div className="bottom-info text-[13px] my-3.5 text-center font-light">
             <p>
-              This is a research project and may generate incomplete or
+              This is a research project and will generate incomplete or
               inaccurate content. Please verify all outputs before use.
             </p>
           </div>

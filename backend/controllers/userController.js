@@ -2,7 +2,6 @@ import userModel from "../models/userModel.js";
 import validator from "validator";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
-import mongoose from "mongoose";
 
 const createToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET);
@@ -230,7 +229,7 @@ const loginUser = async (req, res) => {
     const user = await userModel.findOne({ email });
 
     if (!user) {
-      return res.json({
+      return res.status(404).json({
         statusCode: 404,
         message: "User not found",
       });
@@ -239,7 +238,7 @@ const loginUser = async (req, res) => {
     const isMatch = await bcrypt.compare(password, user.password);
 
     if (!isMatch) {
-      return res.json({
+      return res.status(401).json({
         statusCode: 401,
         message: "Password does not match",
       });
@@ -260,7 +259,7 @@ const loginUser = async (req, res) => {
       response.credit = user.credit;
     }
 
-    return res.json(response);
+    return res.status(200).json(response);
   } catch (error) {
     console.error(error);
     return res.json({
@@ -277,21 +276,21 @@ const registerUser = async (req, res) => {
     const exists = await userModel.findOne({ email });
 
     if (exists) {
-      return res.json({
+      return res.status(409).json({
         message: "user exists",
-        statusCode: 300,
+        statusCode: 409,
       });
     }
 
     if (validator.isEmail(email) === false) {
-      return res.json({
+      return res.status(400).json({
         message: "email invalid",
         statusCode: 400,
       });
     }
 
     if (password.length < 8) {
-      return res.json({
+      return res.status(400).json({
         message: "password too short",
         statusCode: 400,
       });
@@ -316,7 +315,7 @@ const registerUser = async (req, res) => {
 
     const token = createToken(user._id);
 
-    res.json({
+    res.status(200).json({
       statusCode: 200,
       message: "user created",
       token: token,
@@ -325,7 +324,7 @@ const registerUser = async (req, res) => {
     });
   } catch (error) {
     console.error(error);
-    res.json({
+    res.status(500).json({
       message: "Failed threw error",
       error: error.message,
     });

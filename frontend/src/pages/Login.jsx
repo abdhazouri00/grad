@@ -38,7 +38,6 @@ const Login = () => {
             localStorage.setItem("chatToken", response.data.key);
 
             console.log(localStorage.getItem("chatToken"));
-            
 
             return axios.post(backendUrl + "/api/user/register", {
               name,

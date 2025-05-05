@@ -91,8 +91,8 @@ const Generate = () => {
       const newConvId = convRes.data.conversation.id;
       setConversationId(newConvId);
 
-      // Send initial message
-      const message = `Project Title: ${formData.projectName}\nDescription: ${formData.desc}\nFeatures: ${formData.features}\nPreferences and Tools: ${formData.prefTools}`;
+      const message = `Project Title: ${formData.projectName}\nDescription: ${formData.desc}\nFeatures: ${formData.features}\nPreferences and Tools: ${formData.prefTools}\nPlease generate a complete document with all sections included. Do not skip any part, and make sure every section is fully provided.`;
+
 
       await axios.post(
         `${chatbot}/messages`,
